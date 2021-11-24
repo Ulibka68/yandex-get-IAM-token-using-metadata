@@ -1,0 +1,9 @@
+.idea
+node_modules
+tmp
+dist
+
+# env files
+.env
+main.env
+funcid.env
