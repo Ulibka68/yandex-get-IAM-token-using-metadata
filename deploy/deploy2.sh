@@ -5,9 +5,9 @@ pwd
 export $(grep -v '^#' ./.env | xargs -d '\n')
 rm -R dist
 
-echo "npx tsc --build tsconfig.json"
-npx tsc --build tsconfig.json
-cp package.json ./dist/package.json
+echo "npm run esbuild-ydb"
+npm run esbuild-ydb
+#cp package.json ./dist/package.json
 
 
 echo "Создание версии функции $FUNCTION_NAME"
@@ -17,8 +17,8 @@ yc serverless function version create \
   --entrypoint index.handler \
   --memory 256m \
   --execution-timeout 8s \
-  --source-path ./dist \
+  --source-path ./dist/esbuild \
   --service-account-id=$SERVICE_ACCOUNT_ID \
   --folder-id $FOLDER_ID \
-  --environment AWS_ACCESS_KEY_ID=$FUNCTION_NAME
+  --environment AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID
 

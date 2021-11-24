@@ -1,5 +1,6 @@
-require("dotenv").config("env.local");
+// require("dotenv").config(".env");
 import { YC } from "./yc";
+import fetch from "node-fetch";
 
 module.exports.handler = async function (
   event: YC.CloudFunctionsHttpEvent,
@@ -20,30 +21,25 @@ module.exports.handler = async function (
     return response;
   }
 
-  if (httpMethod != "POST")
+  if (httpMethod != "GET")
     return {
       statusCode: 405,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify({
-        errMsg: "Используйте метод POST для сжатия изображения",
+        errMsg: "Используйте метод GET ",
       }),
       isBase64Encoded: false,
     };
 
   const inpFnames: Array<string> = context.getPayload();
 
-  const outObject = {};
-  for (let i = 0; i < inpFnames.length; i++) {
-    const retImgs = await compressImage(
-      process.env.TMPBACKETNAME,
-      inpFnames[i]
-    );
-    outObject[inpFnames[i]] = retImgs;
-  }
+  /* const outObject = {
+    info: "Тестовый вызов ОК",
+  };*/
 
-  await deleteImages(inpFnames);
+  const outObject = await getIam();
 
   return {
     statusCode: 200,
@@ -54,3 +50,17 @@ module.exports.handler = async function (
     isBase64Encoded: false,
   };
 };
+
+const metaDataUrlIamToken =
+  "http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token";
+const headers = { "Metadata-Flavor": "Google" };
+
+async function getIam() {
+  const resp = await fetch(metaDataUrlIamToken, {
+    headers: headers,
+  });
+  return {
+    code: resp.status,
+    body: await resp.json(),
+  };
+}

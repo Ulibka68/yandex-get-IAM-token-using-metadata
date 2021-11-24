@@ -2,7 +2,6 @@
   "name": "compress-image-s3",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "tsc",
     "deploy": "tsc && .\\deploy\\deploy-compress.bat\n",
@@ -10,18 +9,24 @@
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "clear-node_modules": "rimraf ./**/node_modules",
-    "test": "ts-node ./src/test/testcompress.ts"
+    "test": "ts-node ./src/test/testcompress.ts",
+    "esbuild-ydb": "esbuild src/index.ts --bundle --platform=node --sourcemap=external --outfile=dist/esbuild/index.js",
+    "esbuild-ydb1": "esbuild src/test/fetch.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/esbuild/ydb.js",
+    "esbuild-ydb2": "esbuild src/test/fetch.ts --bundle --platform=node --sourcemap=external --outfile=dist/esbuild/ydb.cjs"
   },
   "keywords": [],
   "author": "Ulibka68",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "node-fetch": "^2.6.6"
   },
   "devDependencies": {
     "@types/node": "^16.11.10",
+    "@types/node-fetch": "^2.5.12",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "esbuild": "^0.13.15",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
