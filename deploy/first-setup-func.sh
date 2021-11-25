@@ -23,6 +23,4 @@ cat main.env funcid.env > .env
 
 rm -R ./dist
 
-#echo "Установить переадресацию на бакет"
-#sudo npx ts-node ./setup/setup-backet.ts
 
