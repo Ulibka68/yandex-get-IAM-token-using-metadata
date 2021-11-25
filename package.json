@@ -1,16 +1,13 @@
 {
-  "name": "get-IAM-token-using-metadata",
+  "name": "yandex-get-IAM-token-using-metadata",
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
-    "deploy2": "запусти deploy.sh в режиме wsl в директории deploy",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix",
-    "esbuild-ydb": "esbuild src/index.ts --bundle --platform=node --minify --outfile=dist/esbuild/index.js"
+    "format": "eslint src/**/*.ts --fix"
   },
   "keywords": [],
-  "author": "Ulibka68",
+  "author": "Gayrat Vlasov",
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.6.6"
@@ -20,7 +17,6 @@
     "@types/node-fetch": "^2.5.12",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "esbuild": "^0.13.15",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
