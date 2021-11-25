@@ -19,7 +19,7 @@ module.exports.handler = async function (
       isBase64Encoded: false,
     };
 
-  const outObject = getIam();
+  const outObject = await getIam();
 
   return {
     statusCode: 200,
