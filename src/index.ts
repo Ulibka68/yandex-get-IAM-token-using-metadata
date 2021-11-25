@@ -1,6 +1,18 @@
-// require("dotenv").config(".env");
+require("dotenv").config(".env");
 import { YC } from "./yc";
 import fetch from "node-fetch";
+import {
+  getLogger,
+  Driver,
+  Logger,
+  MetadataAuthService,
+  Session,
+} from "ydb-sdk";
+
+const databaseName = process.env.DATABASENAME!;
+const logger = getLogger({ level: process.env.LOGLEVEL! });
+const entryPoint = process.env.ENTRYPOINT!;
+let driver: Driver = null as unknown as Driver; // singleton
 
 module.exports.handler = async function (
   event: YC.CloudFunctionsHttpEvent,
@@ -33,13 +45,19 @@ module.exports.handler = async function (
       isBase64Encoded: false,
     };
 
-  const inpFnames: Array<string> = context.getPayload();
+  // const inpFnames: Array<string> = context.getPayload();
 
   /* const outObject = {
     info: "Тестовый вызов ОК",
   };*/
 
-  const outObject = await getIam();
+  await initYDBdriver();
+
+  const outObject: any = driver ? { res: true } : { res: false };
+
+  await driver.tableClient.withSession(async (session) => {
+    outObject.tableDef = await describeTable(session, "series", logger);
+  });
 
   return {
     statusCode: 200,
@@ -63,4 +81,36 @@ async function getIam() {
     code: resp.status,
     body: await resp.json(),
   };
+}
+
+export async function initYDBdriver() {
+  if (driver) return; // singleton
+  logger.info("Start preparing driver ...");
+  const authService = new MetadataAuthService(databaseName);
+  driver = new Driver(entryPoint, databaseName, authService);
+
+  if (!(await driver.ready(10000))) {
+    logger.fatal(`Driver has not become ready in 10 seconds!`);
+    process.exit(1);
+  }
+  return driver;
+}
+
+export async function describeTable(
+  session: Session,
+  tableName: string,
+  logger: Logger
+) {
+  logger.info(`Describing table: ${tableName}`);
+  const result = await session.describeTable(tableName);
+  const resultObj: any = { info: `Describe table  ${tableName}` };
+  const columns = [];
+  for (const column of result.columns) {
+    columns.push({
+      name: column.name,
+      type: column.type!.optionalType!.item!.typeId!,
+    });
+  }
+  resultObj.columns = columns;
+  return resultObj;
 }

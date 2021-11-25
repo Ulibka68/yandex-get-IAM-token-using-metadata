@@ -20,5 +20,5 @@ yc serverless function version create \
   --source-path ./dist/esbuild \
   --service-account-id=$SERVICE_ACCOUNT_ID \
   --folder-id $FOLDER_ID \
-  --environment AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID
+  --environment DOCUMENT_API_ENDPOINT=$DOCUMENT_API_ENDPOINT,DATABASENAME=$DATABASENAME,YDB_SDK_LOGLEVEL=$YDB_SDK_LOGLEVEL,LOGLEVEL=$LOGLEVEL,ENTRYPOINT=$ENTRYPOINT
 
