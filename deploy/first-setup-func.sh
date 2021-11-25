@@ -1,6 +1,4 @@
 #!/bin/sh
-#source ../.env
-#cd s3-compress-after-presign
 pwd
 export $(grep -v '^#' main.env | xargs -d '\n')
 
@@ -25,6 +23,4 @@ cat main.env funcid.env > .env
 
 rm -R ./dist
 
-#echo "Установить переадресацию на бакет"
-#sudo npx ts-node ./setup/setup-backet.ts
 
