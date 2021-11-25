@@ -1,8 +1,5 @@
 #!/bin/sh
-#source ../.env
-#cd s3-compress-after-presign
 pwd
-export $(grep -v '^#' ./.env | xargs -d '\n')
 rm -R dist
 
 echo "npm run esbuild-ydb"
@@ -20,5 +17,4 @@ yc serverless function version create \
   --source-path ./dist/esbuild \
   --service-account-id=$SERVICE_ACCOUNT_ID \
   --folder-id $FOLDER_ID \
-  --environment DOCUMENT_API_ENDPOINT=$DOCUMENT_API_ENDPOINT,DATABASENAME=$DATABASENAME,YDB_SDK_LOGLEVEL=$YDB_SDK_LOGLEVEL,LOGLEVEL=$LOGLEVEL,ENTRYPOINT=$ENTRYPOINT
 
